@@ -1,0 +1,54 @@
+# ==========================================
+# Environment files
+# ==========================================
+biterush_frontend/.env
+biterush_frontend/.env.*
+
+biterush_backend/**/.env
+biterush_backend/**/.env.*
+
+# ==========================================
+# Node.js / Vite
+# ==========================================
+biterush_frontend/node_modules/
+biterush_frontend/dist/
+biterush_frontend/.vite/
+biterush_frontend/.cache/
+
+# Logs
+biterush_frontend/npm-debug.log*
+biterush_frontend/yarn-debug.log*
+biterush_frontend/yarn-error.log*
+biterush_frontend/pnpm-debug.log*
+
+# ==========================================
+# Java / Spring Boot
+# ==========================================
+biterush_backend/**/target/
+biterush_backend/**/build/
+biterush_backend/**/.gradle/
+biterush_backend/**/out/
+
+# IntelliJ
+biterush_backend/**/.idea/
+biterush_backend/**/*.iml
+
+# Eclipse
+biterush_backend/**/.project
+biterush_backend/**/.classpath
+biterush_backend/**/.settings/
+
+# VS Code
+.vscode/
+
+# ==========================================
+# Project Logs
+# ==========================================
+logs/
+*.log
+
+# ==========================================
+# OS Files
+# ==========================================
+.DS_Store
+Thumbs.db
