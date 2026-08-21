@@ -1,6 +1,5 @@
 package com.biterush.common.event;
 
-import com.biterush.auth_serivce.model.enums.STATUS;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,9 +16,5 @@ public class UserCreatedEvent {
     private String lastName;
     private String email;
     private String phone;
-    private Boolean emailVerified;
-    private Boolean phoneVerified;
-    private UUID activationToken;
-    private LocalDateTime activationTokenExpiry;
-    private STATUS status;
+    private String status;
 }

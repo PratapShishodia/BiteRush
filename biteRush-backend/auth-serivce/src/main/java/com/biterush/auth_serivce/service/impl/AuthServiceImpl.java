@@ -29,8 +29,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -69,13 +71,14 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(savedUserCredentials.getLastName())
                 .email(savedUserCredentials.getEmail())
                 .phone(savedUserCredentials.getPhone())
-                .status(savedUserCredentials.getStatus())
+                .status(String.valueOf(savedUserCredentials.getStatus()))
                 .build();
         userEventProducer.sendUserEvent(userCreatedEvent);
         return UserCredentialsDTOMapper.toDTO(savedUserCredentials);
     }
 
     @Override
+    @Transactional
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.email(),loginRequestDTO.password()));
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -92,6 +95,7 @@ public class AuthServiceImpl implements AuthService {
                 .revokedAt(LocalDateTime.now().plusDays(15))
                 .createdAt(LocalDateTime.now())
                 .build();
+        refreshTokenRepo.save(refreshTokenEntity);
         return new LoginResponseDTO(UserCredentialsDTOMapper.toDTO(userCredentials), jwtUtil.generateAccessToken(userCredentials), RefreshDTOMapper.toDTO(refreshTokenRepo.save(refreshTokenEntity)));
     }
 
@@ -108,6 +112,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public Boolean logout(UUID userId) {
         RefreshToken refreshTokenEntity = refreshTokenRepo.findByUserId(userId).orElseThrow(() -> new RuntimeException("Refresh Token not found"));
         refreshTokenRepo.delete(refreshTokenEntity);
@@ -115,6 +120,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public Boolean activateProfile(String activationToken) {
         UserCredentials userCredentials = userCredentialsRepo.findByActivationToken(activationToken).orElseThrow(() -> new RuntimeException("Activation Token not found"));
         if (userCredentials.getActivationTokenExpiry().isBefore(LocalDateTime.now()))
@@ -125,6 +131,7 @@ public class AuthServiceImpl implements AuthService {
         return Boolean.TRUE;
     }
 
+    @Transactional
     public Boolean verifyOTP(String email, String OTP) {
         UserCredentials user = userCredentialsRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -146,6 +153,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public Boolean forgetPassword(String email, String OTP, PasswordChangeRequest passwordChangeRequest) {
         UserCredentials userCredentials = userCredentialsRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("Email not found"));
         if(!userCredentials.isOTPVerified()){
@@ -160,12 +168,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public Boolean sendOTP(String email) {
+        UserCredentials userCredentials = userCredentialsRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        String OTP = String.valueOf(100000 + new SecureRandom().nextInt(900000));
+        userCredentials.setOTP(OTP);
+        userCredentials.setOtpExpiry(LocalDateTime.now().plusMinutes(15));
+        userCredentials.setOTPVerified(false);
+        userCredentialsRepo.save(userCredentials);
         //Send Email
         return null;
     }
 
     @Override
+    @Transactional
     public Boolean changePassword(PasswordChangeRequest passwordChangeRequest) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails != null) {
