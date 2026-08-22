@@ -19,7 +19,6 @@ public class RefreshDTOMapper {
 
     public static RefreshToken toEntity(RefreshTokenRequest request){
         return RefreshToken.builder()
-                .userId(request.getUserId())
                 .refreshToken(request.getRefreshToken())
                 .build();
     }

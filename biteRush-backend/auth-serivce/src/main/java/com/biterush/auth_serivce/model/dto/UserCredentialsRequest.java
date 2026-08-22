@@ -20,6 +20,4 @@ public class UserCredentialsRequest {
     private Boolean emailVerified;
     private Boolean phoneVerified;
     private LocalDateTime lastLoginAt;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

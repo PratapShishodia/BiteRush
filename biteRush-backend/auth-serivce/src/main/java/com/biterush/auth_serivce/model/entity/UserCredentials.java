@@ -20,7 +20,7 @@ import java.util.UUID;
 @Entity
 public class UserCredentials {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long credentialID;
     private UUID userId;
     private String firstName;

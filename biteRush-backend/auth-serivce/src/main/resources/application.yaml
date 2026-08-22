@@ -3,10 +3,11 @@ spring:
     name: auth-service
 
   datasource:
-    url: ${DB_URL:jdbc:h2:mem:authdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-    username: ${DB_USERNAME:sa}
-    password: ${DB_PASSWORD:sa}
-    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.h2.Driver}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:your_password}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.postgresql.Driver}
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,7 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: ${DB_DIALECT:org.hibernate.dialect.H2Dialect}
+        dialect: ${DB_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -28,24 +29,9 @@ spring:
       notification: notification-topic
 
 server:
-  port: ${APPLICATION_PORT}
+  port: ${APPLICATION_PORT:8090}
   servlet:
     context-path: /api
-
-logging:
-  pattern:
-    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSL}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
-  level:
-    root: INFO
-    com:
-      ps:
-        backend: DEBUG
-  file:
-    name: ../logs/${spring.application.name}.log
-jwt:
-  secret: ${JWT_SECRET}
-  AccessTokenExpiration: 900000
-  refreshTokenExpiration: 604800000
 
 eureka:
   instance:
@@ -58,18 +44,7 @@ eureka:
     instance:
       instance-id: ${spring.application.name}:${server.port}
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-  endpoint:
-    health:
-      show-details: always
-
-info:
-  app:
-    name: ${spring.application.name}
-    description: Auth Service
-    version: 1.0.0
+jwt:
+  secret: ${JWT_SECRET}
+  AccessTokenExpiration: 900000
+  refreshTokenExpiration: 604800000

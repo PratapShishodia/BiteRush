@@ -22,12 +22,12 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/register/**",
-                                "/api/v1/auth/login/**",
-                                "/api/v1/auth/refresh/**",
-                                "/api/v1/auth/sendOTP/**",
-                                "/api/v1/auth/forget-password/**",
-                                "/api/v1/auth/activate-profile/**"
+                        .requestMatchers("/auth/register/**",
+                                "/auth/login/**",
+                                "/auth/refresh/**",
+                                "/auth/sendOTP/**",
+                                "/auth/forget-password/**",
+                                "/auth/activate-profile/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
