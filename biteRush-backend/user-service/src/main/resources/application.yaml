@@ -3,10 +3,10 @@ spring:
     name: user-service
 
   datasource:
-    url: ${DB_URL:jdbc:h2:mem:authdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-    username: ${DB_USERNAME:sa}
-    password: ${DB_PASSWORD:sa}
-    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.h2.Driver}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.postgresql.Driver}
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: ${DB_DIALECT:org.hibernate.dialect.H2Dialect}
+        dialect: ${DB_DIALECT}
 
   kafka:
     bootstrap-servers: localhost:9092
