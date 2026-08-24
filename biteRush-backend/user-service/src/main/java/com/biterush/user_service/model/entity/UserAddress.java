@@ -27,8 +27,8 @@ public class UserAddress {
     private String state;
     private String country;
     private String postalCode;
-    private float latitude;
-    private float longitude;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
     private boolean isDefault;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
