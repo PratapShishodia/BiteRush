@@ -18,6 +18,8 @@ import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoutes";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -29,18 +31,26 @@ function App() {
 
             <main className="min-h-screen bg-white dark:bg-gray-950">
               <Routes>
+                {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/restaurants" element={<Restaurants />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetails />} />
                 <Route path="/search" element={<Search />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/orders/:id" element={<OrderTracking />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/favorites" element={<Favorites />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+
+                {/* Protected Routes */}
+                {/* <Route element={<ProtectedRoute />}> */}
+                  <Route path="/editProfile" element={<EditProfile />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/orders/:id" element={<OrderTracking />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/favorites" element={<Favorites />} />
+                {/* </Route> */}
+
+                {/* 404 */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

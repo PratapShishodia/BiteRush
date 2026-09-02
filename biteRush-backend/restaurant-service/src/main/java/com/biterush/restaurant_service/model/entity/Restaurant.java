@@ -5,7 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -15,40 +16,62 @@ import java.util.UUID;
 @Builder
 @Entity
 public class Restaurant {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID restaurantId;
-    private UUID ownerId;
-    private String restaurantName;
-    private String slug;
+
+    private String name;
     private String description;
-    private String phone;
+    private String phoneNumber;
     private String email;
+
     private String logoUrl;
     private String coverImageUrl;
+
     private String addressLine1;
     private String addressLine2;
     private String city;
     private String state;
     private String country;
     private String postalCode;
+
     private BigDecimal latitude;
     private BigDecimal longitude;
+
     private BigDecimal rating;
-    private Long totalRatings;
+    private Integer ratingCount;
+
     private Integer priceForTwo;
-    private Integer deliveryTimeMin;
-    private Integer deliveryTimeMax;
+
+    private Integer deliveryMinTime;
+    private Integer deliveryMaxTime;
+
     private Boolean isPureVeg;
-    private Boolean isActive;
+    @Builder.Default
+    private Boolean isActive = true;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "restaurant",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<RestaurantHours> restaurantHours;
-    @ManyToMany
-    @JoinTable(
-            name = "restaurant_cuisine",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "cuisine_id")
+
+    @OneToMany(
+            mappedBy = "restaurant",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private Set<Cuisine> cuisines = new HashSet<>();
+    @Builder.Default
+    private List<RestaurantHours> restaurantHours = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.isActive = true;
+        this.restaurantHours = new ArrayList<>();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

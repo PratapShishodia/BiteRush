@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { authService } from "../services/AuthService";
 
 function Login() {
   const navigate = useNavigate();
@@ -19,19 +20,35 @@ function Login() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setLoading(true);
-
-    setTimeout(() => {
-      login({
-        name: "Rahul Sharma",
-        email: form.email,
-      });
-
+    try {
+      console.log("IN login");
+      console.table(form);
+      const response = await authService.login(form);
+      console.table(response.data);
+      localStorage.setItem("jwtToken", response.data.jwtToken);
+      login(response.data.response);
       navigate("/");
-    }, 700);
+    } catch (error) {
+      console.error("Login failed:", error);
+      console.error("Status:", error.response?.status);
+      console.error("Response:", error.response?.data);
+
+      // console.table(error);
+
+      alert(
+        error.response?.data?.message || "Unable to Login. Please try again.",
+      );
+      // setError(
+      //   error.response?.data?.message ||
+      //     "Unable to create account. Please try again.",
+      // );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

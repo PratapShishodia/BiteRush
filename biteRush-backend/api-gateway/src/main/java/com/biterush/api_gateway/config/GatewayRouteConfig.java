@@ -13,7 +13,7 @@ public class GatewayRouteConfig {
 
         return builder.routes()
 
-                .route("user-service", r -> r
+                .route("auth-service", r -> r
                         .path("/api/auth/**")
                         .uri("lb://AUTH-SERVICE"))
 

@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { authService } from "../services/AuthService";
 
 function Signup() {
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [form, setForm] = useState({
-    name: "",
     email: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
     password: "",
   });
 
   const [loading, setLoading] = useState(false);
-
+  // const [error, setError] = useState("");
+  const { login } = useAuth();
   const handleChange = (event) => {
     setForm({
       ...form,
@@ -20,19 +23,45 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setLoading(true);
+    // setError("");
 
-    setTimeout(() => {
-      login({
-        name: form.name,
+    try {
+      // 1. Register the user
+      await authService.register(form);
+
+      // 2. Login after successful registration
+      const loginResponse = await authService.login({
         email: form.email,
+        password: form.password,
       });
 
+      console.table(loginResponse.data);
+
+      localStorage.setItem("jwtToken", loginResponse.data.jwtToken);
+
+      // 3. Store login response in AuthContext
+      login(loginResponse.data.response);
+
+      // 4. Redirect after everything succeeds
       navigate("/");
-    }, 700);
+    } catch (error) {
+      console.error("Signup failed:", error);
+
+      alert(
+        error.response?.data?.message ||
+          "Unable to create account. Please try again.",
+      );
+      // setError(
+      //   error.response?.data?.message ||
+      //     "Unable to create account. Please try again.",
+      // );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,18 +86,40 @@ function Signup() {
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             {/* Name */}
             <div>
-              <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                Full name
+              <label
+                htmlFor="firstName"
+                className="mb-2 block text-sm font-medium"
+              >
+                First name
               </label>
 
               <input
-                id="name"
-                name="name"
+                id="firstName"
+                name="firstName"
                 type="text"
                 required
-                value={form.name}
+                value={form.firstName}
                 onChange={handleChange}
-                placeholder="Rahul Sharma"
+                placeholder="Pratap"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-red-500 dark:border-gray-700 dark:bg-gray-950"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="lastName"
+                className="mb-2 block text-sm font-medium"
+              >
+                Last name
+              </label>
+
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                required
+                value={form.lastName}
+                onChange={handleChange}
+                placeholder="Shishodia"
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-red-500 dark:border-gray-700 dark:bg-gray-950"
               />
             </div>
@@ -87,6 +138,22 @@ function Signup() {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-red-500 dark:border-gray-700 dark:bg-gray-950"
+              />
+            </div>
+            <div>
+              <label htmlFor="phone" className="mb-2 block text-sm font-medium">
+                Phone
+              </label>
+
+              <input
+                id="phone"
+                name="phone"
+                type="number"
+                required
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="9999999999"
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-red-500 dark:border-gray-700 dark:bg-gray-950"
               />
             </div>

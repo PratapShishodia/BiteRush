@@ -1,0 +1,77 @@
+scalar UUID
+scalar BigDecimal
+scalar LocalTime
+
+enum DayOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+}
+
+type Restaurant {
+    restaurantId: UUID!
+    name: String!
+    description: String
+
+    phoneNumber: String
+    email: String
+
+    logoUrl: String
+    coverImageUrl: String
+
+    addressLine1: String
+    addressLine2: String
+    city: String
+    state: String
+    country: String
+    postalCode: String
+
+    latitude: BigDecimal
+    longitude: BigDecimal
+
+    rating: BigDecimal
+    ratingCount: Int
+
+    priceForTwo: Int
+
+    deliveryMinTime: Int
+    deliveryMaxTime: Int
+
+    isPureVeg: Boolean
+    isActive: Boolean
+    restaurantHours: [RestaurantHours!]!
+}
+
+type Cuisine {
+    cuisineId: UUID!
+    name: String!
+    slug: String
+    imageUrl: String
+    isActive: Boolean
+
+    restaurants: [Restaurant!]!
+}
+
+type RestaurantHours {
+    restaurantHoursId: UUID!
+
+    dayOfWeek: DayOfWeek!
+    openingTime: LocalTime
+    closingTime: LocalTime
+    isClosed: Boolean
+}
+
+type Query {
+
+    restaurants: [Restaurant!]!
+
+    restaurant(id: UUID!): Restaurant
+
+    cuisines: [Cuisine!]!
+
+    cuisine(id: UUID!): Cuisine
+}

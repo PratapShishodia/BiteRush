@@ -1,0 +1,86 @@
+version: "3.9"
+
+name: biterush
+
+services:
+  eureka-server:
+    build:
+      context: ./biteRush-backend/eureka-server
+    container_name: biterush-eureka-server
+    environment:
+      SERVER_PORT: 8761
+      EUREKA_URI: http://eureka-server:8761/eureka/
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./biteRush-backend/api-gateway
+    container_name: biterush-api-gateway
+    environment:
+      SERVER_PORT: 8080
+      EUREKA_URI: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: ./biteRush-backend/user-service
+    container_name: biterush-user-service
+    environment:
+      SERVER_PORT: 8081
+      EUREKA_URI: http://eureka-server:8761/eureka/
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+    restart: unless-stopped
+
+  order-service:
+    build:
+      context: ./biteRush-backend/order-service
+    container_name: biterush-order-service
+    environment:
+      SERVER_PORT: 8082
+      EUREKA_URI: http://eureka-server:8761/eureka/
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+    restart: unless-stopped
+
+  restaurant-service:
+    build:
+      context: ./biteRush-backend/restaurant-service
+    container_name: biterush-restaurant-service
+    environment:
+      SERVER_PORT: 8083
+      EUREKA_URI: http://eureka-server:8761/eureka/
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    restart: unless-stopped
+
+  frontend:
+    image: node:22-alpine
+    container_name: biterush-frontend
+    working_dir: /app
+    volumes:
+      - ./biteRush-frontend:/app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8080
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+
+# Optional infrastructure services are kept separate and can be launched with:
+# docker compose -f infrastructure/logging/docker-compose.yml up -d
+# docker compose -f infrastructure/kafka/docker-compose.yml up -d

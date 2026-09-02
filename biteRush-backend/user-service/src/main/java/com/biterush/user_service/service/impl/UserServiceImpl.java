@@ -1,16 +1,16 @@
 package com.biterush.user_service.service.impl;
 
 import com.biterush.common.event.UserCreatedEvent;
-import com.biterush.user_service.model.DTO.UserAddressRequestDTO;
-import com.biterush.user_service.model.DTO.UserAddressResponseDTO;
-import com.biterush.user_service.model.DTO.UserResponseDTO;
-import com.biterush.user_service.model.DTO.UserUpdateRequestDTO;
-import com.biterush.user_service.model.entity.UserAddress;
+import com.biterush.user_service.model.dto.mapper.AddressDTOMapper;
+import com.biterush.user_service.model.dto.mapper.UserDTOMapper;
+import com.biterush.user_service.model.dto.request.AddressRequestDTO;
+import com.biterush.user_service.model.dto.request.UserRequestDTO;
+import com.biterush.user_service.model.dto.response.AddressResponseDTO;
+import com.biterush.user_service.model.dto.response.UserResponseDTO;
+import com.biterush.user_service.model.entity.Address;
 import com.biterush.user_service.model.entity.Users;
-import com.biterush.user_service.model.mapper.UserAddressDTOMapper;
-import com.biterush.user_service.model.mapper.UserDTOMapper;
-import com.biterush.user_service.repository.UserAddressRepo;
-import com.biterush.user_service.repository.UsersRepo;
+import com.biterush.user_service.repository.AddressRepo;
+import com.biterush.user_service.repository.UserRepo;
 import com.biterush.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -28,44 +28,46 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
-
-    private final String UPLOAD_DIR = System.getProperty("user.dir")+"/uploads/productsImg/";
-    private final UsersRepo usersRepo;
-    private final UserAddressRepo userAddressRepo;
+    private final String UPLOAD_DIR = System.getProperty("user.dir")+"/uploads/profileImgs/";
+    private final UserRepo userRepo;
+    private final AddressRepo addressRepo;
 
     @Override
     public UserResponseDTO getMe(UUID userId) {
-        Users user = usersRepo.findById(userId).orElseThrow(()-> new RuntimeException("User not found"));
+        Users user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return UserDTOMapper.toDTO(user);
     }
 
     @Override
-    public UserResponseDTO update(UUID userId, UserUpdateRequestDTO dto) {
-        Users user = usersRepo.findById(userId).orElseThrow(()-> new RuntimeException("User not found"));
+    @Transactional
+    public UserResponseDTO update(UUID userId, UserRequestDTO dto) {
+        Users user = userRepo.findById(userId).orElseThrow(()-> new RuntimeException("User not found"));
         if(dto.getFirstName() != null && !dto.getFirstName().isEmpty()){
             user.setFirstName(dto.getFirstName());
         }
         if(dto.getLastName() != null && !dto.getLastName().isEmpty()){
             user.setLastName(dto.getLastName());
         }
-        if(dto.getDateOfBirth() != null && !dto.getDateOfBirth().isEmpty()){
+        if(dto.getDateOfBirth() != null){
             user.setDateOfBirth(dto.getDateOfBirth());
         }
         if(dto.getGender() != null){
             user.setGender(dto.getGender());
         }
         user.setUpdatedAt(LocalDateTime.now());
-        return UserDTOMapper.toDTO(usersRepo.save(user));
+        return UserDTOMapper.toDTO(userRepo.save(user));
     }
 
     @Override
     @SneakyThrows
+    @Transactional
     public UserResponseDTO updateProfilePic(UUID userId, MultipartFile file) {
         long MAX_SIZE = 2*1024*1024;
         List<String> ALLOWED_TYPES = List.of("image/jpeg","image/png","image/jpg");
         List<String> ALLOWED_EXTENSIONS = List.of("jpeg","png","jpg");
-        Users user = usersRepo.findById(userId).orElseThrow(()-> new RuntimeException("User not Found"));
+        Users user = userRepo.findById(userId).orElseThrow(()-> new RuntimeException("User not Found"));
         if(file.isEmpty()){
             throw new RuntimeException("File is Empty");
         }
@@ -96,41 +98,40 @@ public class UserServiceImpl implements UserService {
         System.out.println("Path: "+filePath.toString());
         Files.write(filePath,file.getBytes());
         String imageURL = UPLOAD_DIR+"/products/images/"+fileName;
-        user.setProfileImageUrl(imageURL);
-        return UserDTOMapper.toDTO(usersRepo.save(user));
+        user.setProfileImage(imageURL);
+        return UserDTOMapper.toDTO(userRepo.save(user));
     }
 
     @Override
+    @Transactional
     public UserResponseDTO createProfile(UserCreatedEvent userCreatedEvent) {
         Users user = UserDTOMapper.toEntity(userCreatedEvent);
         user.setCreatedAt(LocalDateTime.now());
-        return UserDTOMapper.toDTO(usersRepo.save(user));
+        return UserDTOMapper.toDTO(userRepo.save(user));
     }
 
     @Override
-    public UserAddressResponseDTO createAddress(UserAddressRequestDTO dto) {
-        UserAddress userAddress = UserAddressDTOMapper.toEntity(dto);
-        userAddress.setCreatedAt(LocalDateTime.now());
-        if(!dto.isDefault()) {
-            userAddress.setDefault(false);
+    public AddressResponseDTO createAddress(AddressRequestDTO dto) {
+        Address address = AddressDTOMapper.toEntity(dto);
+        address.setCreatedAt(LocalDateTime.now());
+        if(!dto.getIsDefault()) {
+            address.setIsDefault(false);
         }
-        userAddress.setUser(usersRepo.findById(dto.getUserId()).orElseThrow(()->new RuntimeException("User not found")));
-        return UserAddressDTOMapper.toDTO(userAddressRepo.save(userAddress));
+        address.setUser(userRepo.findById(dto.getUser()).orElseThrow(()->new RuntimeException("User not found")));
+        return AddressDTOMapper.toDTO(addressRepo.save(address));
     }
 
     @Override
-    public List<UserAddressResponseDTO> getAllAddress(UUID userId) {
-        List<UserAddress> addressList = userAddressRepo.findByUserUserId(userId);
-        return addressList.stream().map(UserAddressDTOMapper::toDTO).toList();
+    public List<AddressResponseDTO> getAllAddress(UUID userId) {
+        List<Address> addressList = addressRepo.findByUserUserId(userId);
+        return addressList.stream().map(AddressDTOMapper::toDTO).toList();
     }
 
     @Override
-    public UserAddressResponseDTO updateAddress(Long addressId, UserAddressRequestDTO requestDTO) {
-
-        UserAddress address = userAddressRepo.findById(addressId)
+    public AddressResponseDTO updateAddress(UUID addressId, AddressRequestDTO requestDTO) {
+        Address address = addressRepo.findByAddressId(addressId)
                 .orElseThrow(() -> new RuntimeException("Address not found"));
-
-        address.setLabel(requestDTO.getLabel());
+        address.setAddressType(requestDTO.getAddressType());
         address.setAddressLine1(requestDTO.getAddressLine1());
         address.setAddressLine2(requestDTO.getAddressLine2());
         address.setLandmark(requestDTO.getLandmark());
@@ -142,43 +143,27 @@ public class UserServiceImpl implements UserService {
         address.setLongitude(requestDTO.getLongitude());
 
         // If setting this address as default, unset other default addresses
-        if (requestDTO.isDefault()) {
-            userAddressRepo
-                    .unsetDefaultAddress(address.getUser().getUserId(), addressId);
+        if (requestDTO.getIsDefault()) {
+            addressRepo.unsetDefaultAddress(address.getUser().getUserId(), addressId);
         }
 
-        address.setDefault(requestDTO.isDefault());
+        address.setIsDefault(requestDTO.getIsDefault());
 
-        return UserAddressDTOMapper.toDTO(userAddressRepo.save(address));
+        return AddressDTOMapper.toDTO(addressRepo.save(address));
     }
 
     @Override
-    public Boolean deleteAddress(Long addressId) {
-        UserAddress userAddress = userAddressRepo.findById(addressId).orElseThrow(()->new RuntimeException("Address not found"));
-        userAddressRepo.delete(userAddress);
+    public Boolean deleteAddress(UUID addressId) {
+        Address userAddress = addressRepo.findById(addressId).orElseThrow(()->new RuntimeException("Address not found"));
+        addressRepo.delete(userAddress);
         return Boolean.TRUE;
     }
 
     @Override
-    @Transactional
-    public Boolean setDefaultAddress(Long addressId) {
-
-        UserAddress address = userAddressRepo.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("Address not found"));
-
-        Users user = address.getUser();
-
-        // Remove default from all other addresses
-        user.getAddressList().forEach(a -> {
-            if (!a.getAddressId().equals(addressId)) {
-                a.setDefault(false);
-            }
-        });
-
-        // Set selected address as default
-        address.setDefault(true);
-
-        userAddressRepo.save(address);
+    public Boolean setDefaultAddress(UUID addressId) {
+        Address userAddress = addressRepo.findById(addressId).orElseThrow(()->new RuntimeException("Address not found"));
+        userAddress.setIsDefault(true);
+        addressRepo.save(userAddress);
         return Boolean.TRUE;
     }
 }

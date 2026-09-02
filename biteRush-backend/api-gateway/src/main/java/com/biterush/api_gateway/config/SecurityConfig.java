@@ -27,10 +27,10 @@ public class SecurityConfig {
                         .pathMatchers("/auth/register/",
                                 "/auth/login/",
                                 "/auth/refresh"
-                                        ,"/auth/sendOTP"
-                                        ,"/auth/forget-password"
-                                        ,"/auth/activate-profile"
-                                        ,"/actuator"
+                                ,"/auth/sendOTP"
+                                ,"/auth/forget-password"
+                                ,"/auth/activate-profile"
+                                ,"/actuator"
                         ).permitAll()
                         .anyExchange().permitAll()
                 )

@@ -11,11 +11,13 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
-public class JWTUtil {@Value("${jwt.secret}")
-private String SECRET_KEY;
+public class JWTUtil {
+
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
     public SecretKey getSigningKey() {
-        System.out.println("SECRET_KEY:" + SECRET_KEY);
+//        System.out.println("SECRET_KEY:" + SECRET_KEY);
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -43,7 +45,6 @@ private String SECRET_KEY;
     public boolean isValid(String token) {
 
         try {
-
             extractUsername(token);
             return extractExpiration(token).after(new Date());
 

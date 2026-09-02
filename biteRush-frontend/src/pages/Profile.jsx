@@ -23,7 +23,8 @@ function Profile() {
               </div>
 
               <h2 className="mt-4 text-lg font-semibold">
-                {user?.name || "User"}
+                {`${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim() || "User"}
+                {/* {user?.firstName + user?.lastName || "User"} */}
               </h2>
 
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">

@@ -52,3 +52,30 @@ logs/
 # ==========================================
 .DS_Store
 Thumbs.db
+
+# ==========================================
+# Maven / Java (additional top-level ignores)
+# ==========================================
+/target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.war
+*.ear
+
+# Maven wrapper
+mvnw
+mvnw.cmd
+
+# Spring Boot
+spring.log
+
+# Temporary files
+*.tmp
+*~
+
+# Docker
+docker-compose.override.yml
+
+# Node (if present)
+node_modules/

@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { authService } from "../services/AuthService";
 
 const locations = ["Ghaziabad", "Noida", "Delhi", "Gurugram", "Greater Noida"];
 
 function Navbar() {
-  const [darkMode, setDarkMode] = useState(
-    document.documentElement.classList.contains("dark"),
-  );
   const { user, isLoggedIn, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -16,9 +14,17 @@ function Navbar() {
 
   const { cartCount } = useCart();
 
+  const [darkMode, setDarkMode] = useState(
+    document.documentElement.classList.contains("dark"),
+  );
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
   const toggleTheme = () => {
     setDarkMode((current) => !current);
-    document.documentElement.classList.toggle("dark");
   };
 
   const selectLocation = (selectedLocation) => {
@@ -28,6 +34,13 @@ function Navbar() {
 
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const logout_function = async () => {
+    const response = await authService.logout(user.userId);
+    logout();
+    closeMenu();
+    alert(response);
   };
 
   return (
@@ -86,7 +99,7 @@ function Navbar() {
                 to="/profile"
                 className="text-sm text-gray-700 hover:text-red-500 dark:text-gray-300"
               >
-                {user.name}
+                {user.firstName} {user.lastName}
               </Link>
             ) : (
               <Link
@@ -197,8 +210,7 @@ function Navbar() {
                     <button
                       type="button"
                       onClick={() => {
-                        logout();
-                        closeMenu();
+                        logout_function();
                       }}
                       className="border-b border-gray-100 py-4 text-left text-sm text-red-500 dark:border-gray-800"
                     >

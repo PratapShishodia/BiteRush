@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface RestaurantHoursRepo extends JpaRepository<RestaurantHours, Long> {
+public interface RestaurantHoursRepo extends JpaRepository<RestaurantHours, UUID> {
     Optional<RestaurantHours> findByRestaurantRestaurantId(UUID restaurantId);
 }

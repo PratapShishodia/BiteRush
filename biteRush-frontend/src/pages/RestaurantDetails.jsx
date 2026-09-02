@@ -14,6 +14,7 @@ const restaurant = {
   distance: "2.4 km",
   offer: "30% OFF up to ₹100",
   image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200",
+  status: false
 };
 
 const menu = [
@@ -155,6 +156,15 @@ function RestaurantDetails() {
               <div className="rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
                 🛵 Free delivery above ₹399
               </div>
+              {restaurant.status ? (
+                <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900 dark:bg-green-950 dark:text-green-300">
+                  🏷️ Open
+                </div>
+              ) : (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:red-orange-900 dark:bg-red-950 dark:text-red-300">
+                  🏷️ Closed
+                </div>
+              )}
             </div>
           </div>
         </div>

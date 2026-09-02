@@ -2,14 +2,13 @@ package com.biterush.restaurant_service.model.dto.request;
 
 import lombok.*;
 
-@Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@NoArgsConstructor
 @Builder
 public class CuisineRequestDTO {
-    private String cuisineName;
+    private String name;
     private String slug;
-    private String imageUrl;
     private Boolean isActive;
 }

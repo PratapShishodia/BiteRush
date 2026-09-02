@@ -1,6 +1,6 @@
-package com.biterush.user_serivce.handler;
+package com.biterush.user_service.handler;
 
-import com.biterush.user_serivce.model.dto.common.ErrorResponseDTO;
+import com.biterush.user_service.model.dto.common.ErrorResponseDTO;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleException(Exception exception, WebRequest webRequest) {
         System.out.println("Error Message: " + exception.getMessage().length());
-        String error = exception.getMessage().length() < 100 ? exception.getMessage()
-                : "An unexpected error occurred. Please try again later.";
+        String error = exception.getMessage().length() < 100 ? exception.getMessage() : "An unexpected error occurred. Please try again later.";
         ErrorResponseDTO ErrorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false), HttpStatus.INTERNAL_SERVER_ERROR,
                 error, LocalDateTime.now());
@@ -49,8 +48,8 @@ public class GlobalExceptionHandler {
             // Combine all messages into a single comma-separated string
             String combinedMessages = result.getResolvableErrors()
                     .stream()
-                    .map(MessageSourceResolvable::getDefaultMessage) // extract each message
-                    .collect(Collectors.joining(", ")); // join messages
+                    .map(MessageSourceResolvable::getDefaultMessage)  // extract each message
+                    .collect(Collectors.joining(", "));       // join messages
             errors.put(paramName, combinedMessages);
         });
         return ResponseEntity.badRequest().body(errors);

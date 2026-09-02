@@ -1,9 +1,9 @@
 package com.biterush.user_service.controller;
 
-import com.biterush.user_service.model.DTO.UserAddressRequestDTO;
-import com.biterush.user_service.model.DTO.UserAddressResponseDTO;
-import com.biterush.user_service.model.DTO.UserResponseDTO;
-import com.biterush.user_service.model.DTO.UserUpdateRequestDTO;
+import com.biterush.user_service.model.dto.request.AddressRequestDTO;
+import com.biterush.user_service.model.dto.request.UserRequestDTO;
+import com.biterush.user_service.model.dto.response.AddressResponseDTO;
+import com.biterush.user_service.model.dto.response.UserResponseDTO;
 import com.biterush.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PutMapping("/update/me")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestParam UUID userId, @RequestBody UserUpdateRequestDTO dto) {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestParam UUID userId, @RequestBody UserRequestDTO dto) {
         return ResponseEntity.ok(userService.update(userId, dto));
     }
 
@@ -36,27 +36,27 @@ public class UserController {
     }
 
     @PostMapping("/me/addresses")
-    public ResponseEntity<UserAddressResponseDTO> createAddress(@RequestBody UserAddressRequestDTO dto) {
+    public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody AddressRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createAddress(dto));
     }
 
     @PutMapping("/addresses/{addressId}")
-    public ResponseEntity<UserAddressResponseDTO> updateAddress(@PathVariable Long addressId, @RequestBody UserAddressRequestDTO dto) {
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable UUID addressId, @RequestBody AddressRequestDTO dto) {
         return ResponseEntity.ok(userService.updateAddress(addressId,dto));
     }
 
     @DeleteMapping("/addresses/{addressId}")
-    public ResponseEntity<Boolean> deleteAddress(@PathVariable Long addressId) {
+    public ResponseEntity<Boolean> deleteAddress(@PathVariable UUID addressId) {
         return ResponseEntity.ok(userService.deleteAddress(addressId));
     }
 
     @PatchMapping("/addresses/{addressId}/default")
-    public ResponseEntity<Boolean> setDefaultAddress(@PathVariable Long addressId) {
+    public ResponseEntity<Boolean> setDefaultAddress(@PathVariable UUID addressId) {
         return ResponseEntity.ok(userService.setDefaultAddress(addressId));
     }
 
     @GetMapping("/me/addresses")
-    public ResponseEntity<List<UserAddressResponseDTO>> getAddress(@RequestParam UUID userId) {
+    public ResponseEntity<List<AddressResponseDTO>> getAddress(@RequestParam UUID userId) {
         return ResponseEntity.ok(userService.getAllAddress(userId));
     }
 }

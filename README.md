@@ -174,6 +174,60 @@ This project is part of the BiteRush food delivery platform.
 - The application follows modern React best practices with functional components and hooks
 - ESLint rules help maintain code quality and consistency
 
+## 🧩 Adding Kafka Later
+
+If you want to introduce Kafka for async messaging (for example order events, notifications, or event-driven workflows), keep the infrastructure and app configuration split in the same pattern used by the repo today:
+
+1. Start the broker with the existing infrastructure file:
+
+```bash
+docker compose -f infrastructure/kafka/docker-compose.yml up -d
+```
+
+2. Add the broker configuration to the backend services that need to produce or consume events. The main files to update are:
+   - `infrastructure/kafka/docker-compose.yml` — broker definition and ports
+   - `biteRush-backend/<service>/src/main/resources/application.yaml` — Kafka bootstrap servers, topics, consumer groups, and producer settings
+   - `biteRush-backend/<service>/pom.xml` — add the Spring Kafka dependency if it is not already present
+   - `biteRush-backend/<service>/src/main/java/.../config/` — add a Kafka config class or producer/consumer beans when the service starts using messages
+
+3. Example configuration pattern for a service:
+
+```yaml
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: biteRush-order-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+```
+
+4. Add topic names and event contracts to the service layer that publishes or consumes them, then wire the message flow into the matching business action (for example, when an order is created or a payment is confirmed).
+
+This keeps Kafka isolated to the backend and avoids mixing broker setup directly into the frontend code.
+
+## 📊 Centralized Logging with Existing Infrastructure
+
+The repository already includes a logging stack under `infrastructure/logging`. Use that file instead of creating a separate logging setup.
+
+From the project root, start the centralized logging stack:
+
+```bash
+docker compose -f infrastructure/logging/docker-compose.yml up -d
+```
+
+This brings up:
+
+- OpenSearch at `http://localhost:9200`
+- OpenSearch Dashboards at `http://localhost:5601`
+- Fluent Bit to forward backend logs into the logging pipeline
+
+The compose file already mounts the backend folder and points Fluent Bit to the config under `infrastructure/logging/fluent-bit/`, so you can keep the log collection configuration in the existing infrastructure project. If you later add more services, update the Fluent Bit config and the backend log paths there instead of creating ad hoc logging containers in the app folders.
+
 ---
 
 For more information or support, please contact the development team.
