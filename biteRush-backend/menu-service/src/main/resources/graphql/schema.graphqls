@@ -1,0 +1,46 @@
+scalar UUID
+scalar DateTime
+
+type MenuItem {
+    itemId: UUID!
+    restaurantId: UUID!
+    itemName: String!
+    itemDescription: String
+    itemImage: String
+    itemPrice: String!
+    discountedPrice: String
+    isVeg: Boolean!
+    isAvailable: Boolean!
+    preparationTime: Int
+    itemImgUrl: String
+    createdAt: DateTime
+    updatedAt: DateTime
+
+    category: MenuCategory
+}
+
+type MenuCategory {
+    categoryId: UUID!
+    categoryName: String!
+    categoryDescription: String
+    categoryIconUrl: String
+    restaurantId: UUID!
+    isActive: Boolean!
+
+    menuItemList: [MenuItem!]
+}
+
+type Query {
+
+    # Get a single menu item
+    getMenuItemById(itemId: UUID!): MenuItem
+
+    # Get all menu items of a restaurant
+    getMenuItems(restaurantId: UUID!): [MenuItem!]!
+
+    # Get all categories of a restaurant
+    getMenuCategories(restaurantId: UUID!): [MenuCategory!]!
+
+    # Get a single category
+    getMenuCategory(categoryId: UUID!): MenuCategory
+}
