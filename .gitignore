@@ -1,11 +1,9 @@
 # ==========================================
 # Environment files
 # ==========================================
-biterush_frontend/.env
-biterush_frontend/.env.*
-
-biterush_backend/**/.env
-biterush_backend/**/.env.*
+**/.env
+**/.env.*
+!.env.example
 
 # ==========================================
 # Node.js / Vite
