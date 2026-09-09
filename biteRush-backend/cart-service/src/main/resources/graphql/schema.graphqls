@@ -1,0 +1,36 @@
+scalar UUID
+scalar BigDecimal
+scalar LocalDateTime
+
+enum STATUS {
+    ACTIVE
+    CHECKED_OUT
+    ABANDONED
+}
+
+type Cart {
+    cartId: UUID!
+    userId: UUID!
+    restaurantId: UUID!
+    status: STATUS!
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+    cartItems: [CartItem!]!
+}
+
+type CartItem {
+    cartItemId: UUID!
+    menuItemId: UUID!
+    itemName: String!
+    unitPrice: BigDecimal!
+    quantity: Int!
+    totalPrice: BigDecimal!
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+    cart: Cart
+}
+
+type Query {
+    cartByUserId(userId: UUID!): Cart
+    cartItemsByCartId(cartId: UUID!): [CartItem!]!
+}
