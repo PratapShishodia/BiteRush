@@ -20,6 +20,19 @@ public class GatewayRouteConfig {
                 .route("user-service", r -> r
                         .path("/api/user/**")
                         .uri("lb://USER-SERVICE"))
+
+                .route("menu-service", r -> r
+                        .path("/api/menu/**")
+                        .uri("lb://MENU-SERVICE"))
+
+                .route("rating-service", r -> r
+                        .path("/api/rating/**")
+                        .uri("lb://RATING-SERVICE"))
+
+                .route("restaurant-service", r -> r
+                        .path("/api/restaurant/**")
+                        .uri("lb://RESTAURANT-SERVICE"))
+
                 .build();
     }
 }

@@ -16,7 +16,7 @@ public interface AddressRepo extends JpaRepository<Address, UUID> {
     List<Address> findByUserUserId(UUID userId);
     @Modifying
     @Query("""
-    UPDATE UserAddress a
+    UPDATE Address a
     SET a.isDefault = false
     WHERE a.user.userId = :userId
       AND a.addressId <> :addressId

@@ -9,9 +9,9 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class TopicConfig {
 
-    @Value("${spring.kafka.topic.user}")
+    @Value("${spring.kafka.topics.user}")
     private String userTopic;
-    @Value("${spring.kafka.topic.notification}")
+    @Value("${spring.kafka.topics.notification}")
     private String notificationTopic;
 
     

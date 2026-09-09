@@ -10,7 +10,7 @@ public class RatingDTOMapper {
     public static RatingResponseDTO toDTO(Rating review) {
         return RatingResponseDTO.builder()
                 .id(review.getId())
-                .usernameId(review.getUsernameId())
+                .usernameId(review.getUserId())
                 .username(review.getUsername())
                 .restaurantId(review.getRestaurantId())
                 .rating(review.getRating())
@@ -23,7 +23,7 @@ public class RatingDTOMapper {
     public static Rating toEntity(RatingRequestDTO requestDTO) {
         return Rating.builder()
                 .username(requestDTO.getUsername())
-                .usernameId(requestDTO.getUsernameId())
+                .userId(requestDTO.getUsernameId())
                 .restaurantId(requestDTO.getRestaurantId())
                 .rating(requestDTO.getRating())
                 .reviewText(requestDTO.getReviewText())

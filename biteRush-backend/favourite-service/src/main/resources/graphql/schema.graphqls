@@ -1,0 +1,14 @@
+scalar UUID
+scalar LocalTime
+
+type Favourite{
+    id: String!
+    userId: UUID!
+    restaurantId: UUID!
+    createdAt: LocalTime
+}
+
+type Query {
+    favouritesByUserId(userId: ID!): [Favourite!]!
+    favourite(id: UUID!): Favourite
+}

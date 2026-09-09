@@ -52,10 +52,10 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
 
-    @Value("${spring.kafka.topic.user}")
+    @Value("${spring.kafka.topics.user}")
     private String userTopic;
 
-    @Value("${spring.kafka.topic.notification}")
+    @Value("${spring.kafka.topics.notification}")
     private String notificationTopic;
 
     @Override

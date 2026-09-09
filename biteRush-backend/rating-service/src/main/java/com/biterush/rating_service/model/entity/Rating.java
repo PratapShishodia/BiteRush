@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Rating {
     @Id
     private String id;
-    private UUID usernameId;
+    private UUID userId;
     private String username;
     private UUID restaurantId;
     private BigDecimal rating;

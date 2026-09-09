@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: favourite-service
+
+  data:
+    mongodb:
+      uri: ${DB_URL}
+
+server:
+  port: ${APPLICATION_PORT}
+  servlet:
+    context-path: /api
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSL}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+  level:
+    root: INFO
+    com:
+      ps:
+        backend: DEBUG
+  file:
+    name: ../logs/${spring.application.name}.log
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_URL}
+    instance:
+      instance-id: ${spring.application.name}:${server.port}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      show-details: always
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: User Service
+    version: 1.0.0
