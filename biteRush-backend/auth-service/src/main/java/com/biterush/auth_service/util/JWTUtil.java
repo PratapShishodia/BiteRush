@@ -36,6 +36,7 @@ public class JWTUtil {
 //        claims_map.put("userId", String.valueOf(user.getUserId()));
         String token =  Jwts.builder()
                 .subject(user.getEmail())
+            .claim("userId", user.getUserId().toString())
 //                .claims(claims_map)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME))
@@ -76,6 +77,15 @@ public class JWTUtil {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    public String extractUserId(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", String.class);
     }
 
     public Date extractExpiration(String token) {

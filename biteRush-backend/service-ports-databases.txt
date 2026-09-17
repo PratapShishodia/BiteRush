@@ -1,0 +1,13 @@
+ServiceName - Port - DBNAME
+api-gateway - 8081 - N/A
+eureka-server - 8082 - N/A
+auth-service - 8090 - auth_service_db
+user-service - 8100 - user_service_db
+order-service - 8110 - order_service_db, order_status_db
+payment-service - 8120 - payment_service_db
+restaurant-service - 8130 - restaurant_service_db
+menu-service - 8140 - menu_service_db
+notification-service - 8150 - notification_db
+rating-service - 8160 - review_db
+favourite-service - 8170 - favourite_db
+cart-service - 8180 - cart_service_db

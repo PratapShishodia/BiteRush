@@ -1,6 +1,6 @@
 scalar UUID
 scalar BigDecimal
-scalar LocalDateTime
+scalar LocalTime
 
 enum STATUS {
     ACTIVE
@@ -13,8 +13,8 @@ type Cart {
     userId: UUID!
     restaurantId: UUID!
     status: STATUS!
-    createdAt: LocalDateTime
-    updatedAt: LocalDateTime
+    createdAt: LocalTime
+    updatedAt: LocalTime
     cartItems: [CartItem!]!
 }
 
@@ -25,8 +25,8 @@ type CartItem {
     unitPrice: BigDecimal!
     quantity: Int!
     totalPrice: BigDecimal!
-    createdAt: LocalDateTime
-    updatedAt: LocalDateTime
+    createdAt: LocalTime
+    updatedAt: LocalTime
     cart: Cart
 }
 

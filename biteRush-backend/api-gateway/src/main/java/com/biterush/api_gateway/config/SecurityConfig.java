@@ -24,13 +24,18 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/register/",
-                                "/auth/login/",
-                                "/auth/refresh"
-                                ,"/auth/sendOTP"
-                                ,"/auth/forget-password"
-                                ,"/auth/activate-profile"
-                                ,"/actuator"
+                        .pathMatchers(
+                                "/api/auth/signup",
+                                "/api/auth/login",
+                                "/api/auth/refresh",
+                                "/api/auth/logout",
+                                "/api/auth/activate/**",
+                                "/api/auth/send-otp",
+                                "/api/auth/verify-otp",
+                                "/api/auth/forget-password",
+                                "/api/graphql",
+                                "/api/rating/**",
+                                "/actuator/**"
                         ).permitAll()
                         .anyExchange().permitAll()
                 )

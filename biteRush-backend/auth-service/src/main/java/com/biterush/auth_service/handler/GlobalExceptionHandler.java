@@ -2,6 +2,7 @@ package com.biterush.auth_service.handler;
 
 import com.biterush.auth_service.model.dto.common.ErrorResponseDTO;
 import org.springframework.context.MessageSourceResolvable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,11 +20,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleException(Exception exception, WebRequest webRequest) {
-        System.out.println("Error Message: " + exception.getMessage().length());
-        String error = exception.getMessage().length() < 100 ? exception.getMessage() : "An unexpected error occurred. Please try again later.";
+        log.error("Unhandled exception for request={}", webRequest.getDescription(false), exception);
+        String exceptionMessage = exception.getMessage();
+        String error = exceptionMessage != null && exceptionMessage.length() < 100
+                ? exceptionMessage : "An unexpected error occurred. Please try again later.";
         ErrorResponseDTO ErrorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false), HttpStatus.INTERNAL_SERVER_ERROR,
                 error, LocalDateTime.now());

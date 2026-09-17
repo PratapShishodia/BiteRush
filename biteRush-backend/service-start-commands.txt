@@ -1,0 +1,56 @@
+BiteRush Backend - Windows CMD Startup Commands
+================================================
+
+Prerequisites:
+- Java and Maven are installed.
+- PostgreSQL, MongoDB, and Kafka are running as required by the services.
+- Replace replace-with-your-jwt-secret with the same JWT secret in api-gateway and auth-service.
+- Replace MongoDB username:password with valid MongoDB credentials.
+
+Start Eureka first:
+
+start "eureka-server" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\eureka-server && set \"APPLICATION_PORT=8082\" && mvnw.cmd spring-boot:run"
+
+Then start the API Gateway:
+
+start "api-gateway" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\api-gateway && set \"APPLICATION_PORT=8081\" && set \"JWT_SECRET=replace-with-your-jwt-secret\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Auth Service:
+
+start "auth-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\auth-service && set \"DB_URL=jdbc:postgresql://localhost:5432/auth_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"JWT_SECRET=replace-with-your-jwt-secret\" && set \"APPLICATION_PORT=8090\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+User Service:
+
+start "user-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\user-service && set \"DB_URL=jdbc:postgresql://localhost:5432/user_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8100\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Order Service:
+
+start "order-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\order-service && set \"DB_URL=jdbc:postgresql://localhost:5432/order_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8110\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && set \"MONGO_URI=mongodb://username:password@localhost:27017/order_status_db\" && mvnw.cmd spring-boot:run"
+
+Payment Service:
+
+start "payment-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\payment-service && set \"DB_URL=jdbc:postgresql://localhost:5432/payment_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8120\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Restaurant Service:
+
+start "restaurant-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\restaurant-service && set \"DB_URL=jdbc:postgresql://localhost:5432/restaurant_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8130\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Menu Service:
+
+start "menu-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\menu-service && set \"DB_URL=jdbc:postgresql://localhost:5432/menu_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8140\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Notification Service:
+
+start "notification-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\notification-service && set \"DB_URL=mongodb://username:password@localhost:27017/notification_db\" && set \"APPLICATION_PORT=8150\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Rating Service:
+
+start "rating-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\rating-service && set \"DB_URL=jdbc:postgresql://localhost:5432/review_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8160\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Favourite Service:
+
+start "favourite-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\favourite-service && set \"DB_URL=mongodb://username:password@localhost:27017/favourite_db\" && set \"APPLICATION_PORT=8170\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"
+
+Cart Service:
+
+start "cart-service" cmd /k "cd /d D:\Java_Projects\BiteRush\biteRush-backend\cart-service && set \"DB_URL=jdbc:postgresql://localhost:5432/cart_service_db\" && set \"DB_USERNAME=postgres\" && set \"DB_PASSWORD=2122\" && set \"DB_DIALECT=org.hibernate.dialect.PostgreSQLDialect\" && set \"APPLICATION_PORT=8180\" && set \"EUREKA_URL=http://localhost:8082/eureka/\" && mvnw.cmd spring-boot:run"

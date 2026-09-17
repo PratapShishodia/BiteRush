@@ -1,11 +1,11 @@
 scalar UUID
-scalar LocalTime
+scalar LocalDateTime
 
 type Favourite{
     id: String!
     userId: UUID!
     restaurantId: UUID!
-    createdAt: LocalTime
+    createdAt: LocalDateTime
 }
 
 type Query {

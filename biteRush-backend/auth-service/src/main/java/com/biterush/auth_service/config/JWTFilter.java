@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,18 +24,21 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
         System.out.println("Incoming request: " + request.getServletPath());
         log.debug("Incoming request: {}", request.getServletPath());
-        return path.equals("/api/auth/register/**") ||
-                path.equals("/api/auth/login/**") ||
-                path.equals("/api/auth/refresh/**") ||
-                path.equals("/api/auth/sendOTP/**") ||
-                path.equals("/api/auth/forget-password/**") ||
-                path.equals("/api/auth/activate-profile/**");
+        return pathMatcher.match("/api/auth/signup", path)
+                || pathMatcher.match("/api/auth/login", path)
+                || pathMatcher.match("/api/auth/refresh", path)
+                || pathMatcher.match("/api/auth/logout", path)
+                || pathMatcher.match("/api/auth/activate/**", path)
+                || pathMatcher.match("/api/auth/send-otp", path)
+                || pathMatcher.match("/api/auth/verify-otp", path)
+                || pathMatcher.match("/api/auth/forget-password", path);
     }
 
     @Override

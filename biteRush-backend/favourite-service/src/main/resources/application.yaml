@@ -12,15 +12,24 @@ server:
     context-path: /api
 
 logging:
-  pattern:
-    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSL}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+  structured:
+    format:
+      console: logstash
+      file: logstash
+    json:
+      rename:
+        "@timestamp": timestamp
+        logger_name: logger
+      exclude: "@version,thread_name,level_value"
+      add:
+        service: ${spring.application.name}
   level:
     root: INFO
     com:
       ps:
         backend: DEBUG
   file:
-    name: ../logs/${spring.application.name}.log
+    name: ../../logs/${spring.application.name}.log
 
 
 eureka:

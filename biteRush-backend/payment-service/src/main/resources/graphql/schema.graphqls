@@ -1,0 +1,37 @@
+scalar UUID
+scalar BigDecimal
+scalar LocalDateTime
+
+enum METHOD {
+    UPI
+    CARD
+    NET_BANKING
+    CASH_ON_DELIVERY
+}
+
+enum STATUS {
+    SUCCESS
+    FAILED
+}
+
+type Payment {
+    paymentId: UUID!
+    orderId: UUID!
+    amount: BigDecimal!
+    userId: UUID!
+    currency: String!
+    method: METHOD!
+    status: STATUS!
+    provider: String
+    transactionId: UUID
+    failedAt: LocalDateTime
+    failedReason: String
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+}
+
+type Query {
+    findPaymentByPaymentId(paymentId: UUID!): Payment
+    findPaymentByTransactionId(transactionId: UUID!): Payment
+    getAllPaymentsByUserId(userId: UUID!): [Payment!]!
+}

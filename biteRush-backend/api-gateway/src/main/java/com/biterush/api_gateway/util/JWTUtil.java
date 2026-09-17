@@ -32,6 +32,15 @@ public class JWTUtil {
                 .getSubject();
     }
 
+    public String extractUserId(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", String.class);
+    }
+
     public Date extractExpiration(String token) {
 
         return Jwts.parser()

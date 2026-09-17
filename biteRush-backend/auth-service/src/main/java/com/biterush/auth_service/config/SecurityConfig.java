@@ -26,12 +26,15 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register/**",
-                                "/auth/login/**",
-                                "/auth/refresh/**",
-                                "/auth/sendOTP/**",
-                                "/auth/forget-password/**",
-                                "/auth/activate-profile/**"
+                        .requestMatchers(
+                                "/api/auth/signup",
+                                "/api/auth/login",
+                                "/api/auth/refresh",
+                                "/api/auth/logout",
+                                "/api/auth/activate/**",
+                                "/api/auth/send-otp",
+                                "/api/auth/verify-otp",
+                                "/api/auth/forget-password"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

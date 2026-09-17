@@ -1,0 +1,68 @@
+scalar BigDecimal
+scalar LocalDateTime
+scalar UUID
+
+type Query {
+    getAllOrders(userId: UUID!): [Order!]!
+    getOrderByOrderId(orderId: UUID!): Order
+    getStatusHistoryByOrderId(orderId: UUID!): [OrderStatusHistory!]!
+}
+
+type Order {
+    orderId: UUID!
+    orderNumber: String!
+    userId: UUID!
+    restaurantId: UUID!
+    deliveryAddressId: UUID!
+
+    status: STATUS!
+    paymentStatus: PAYMENT_STATUS!
+
+    subtotal: BigDecimal!
+    deliveryFee: BigDecimal!
+    discount: BigDecimal!
+    total: BigDecimal!
+
+    estimatedDeliveryTime: LocalDateTime
+    deliveredAt: LocalDateTime
+    cancelledAt: LocalDateTime
+    cancelReason: String
+
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+
+    orderItems: [OrderItem!]!
+}
+
+type OrderItem {
+    orderItemId: UUID!
+    menuItemId: UUID!
+    itemName: String!
+    unitPrice: BigDecimal!
+    quantity: Int!
+    totalPrice: BigDecimal!
+}
+
+type OrderStatusHistory {
+    id: UUID!
+    orderId: UUID!
+    status: STATUS!
+    createdAt: LocalDateTime!
+}
+
+enum STATUS {
+    PLACED
+    CONFIRMED
+    PREPARING
+    READY
+    OUT_FOR_DELIVERY
+    DELIVERED
+    CANCELLED
+}
+
+enum PAYMENT_STATUS {
+    PENDING
+    PAID
+    FAILED
+    REFUNDED
+}

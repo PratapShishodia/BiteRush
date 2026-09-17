@@ -1,5 +1,5 @@
 scalar UUID
-scalar DateTime
+scalar LocalDateTime
 
 type MenuItem {
     itemId: UUID!
@@ -13,8 +13,8 @@ type MenuItem {
     isAvailable: Boolean!
     preparationTime: Int
     itemImgUrl: String
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
 
     category: MenuCategory
 }

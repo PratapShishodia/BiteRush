@@ -1,0 +1,1087 @@
+﻿{
+    "info":  {
+                 "_postman_id":  "biterush-api-collection-2026",
+                 "name":  "BiteRush API",
+                 "description":  "BiteRush REST and GraphQL requests grouped by service. All requests use the API gateway base URL on port 8081.",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://localhost:8081"
+                     },
+                     {
+                         "key":  "accessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "refreshToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "userId",
+                         "value":  "00000000-0000-0000-0000-000000000001"
+                     },
+                     {
+                         "key":  "restaurantId",
+                         "value":  "00000000-0000-0000-0000-000000000002"
+                     },
+                     {
+                         "key":  "categoryId",
+                         "value":  "00000000-0000-0000-0000-000000000003"
+                     },
+                     {
+                         "key":  "itemId",
+                         "value":  "00000000-0000-0000-0000-000000000004"
+                     },
+                     {
+                         "key":  "cartId",
+                         "value":  "00000000-0000-0000-0000-000000000005"
+                     },
+                     {
+                         "key":  "cartItemId",
+                         "value":  "00000000-0000-0000-0000-000000000006"
+                     },
+                     {
+                         "key":  "addressId",
+                         "value":  "00000000-0000-0000-0000-000000000007"
+                     },
+                     {
+                         "key":  "orderId",
+                         "value":  "00000000-0000-0000-0000-000000000008"
+                     },
+                     {
+                         "key":  "paymentId",
+                         "value":  "00000000-0000-0000-0000-000000000009"
+                     },
+                     {
+                         "key":  "ratingId",
+                         "value":  "00000000-0000-0000-0000-000000000010"
+                     },
+                     {
+                         "key":  "cuisineId",
+                         "value":  "00000000-0000-0000-0000-000000000011"
+                     },
+                     {
+                         "key":  "transactionId",
+                         "value":  "00000000-0000-0000-0000-000000000012"
+                     },
+                     {
+                         "key":  "email",
+                         "value":  "user@example.com"
+                     },
+                     {
+                         "key":  "password",
+                         "value":  "Password123!"
+                     },
+                     {
+                         "key":  "otp",
+                         "value":  "123456"
+                     },
+                     {
+                         "key":  "token",
+                         "value":  "activation-token"
+                     }
+                 ],
+    "item":  [
+                 {
+                     "name":  "Auth",
+                     "item":  [
+                                  {
+                                      "name":  "registerUser",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"userId\":null,\"email\":null,\"phone\":null,\"password\":null,\"firstName\":null,\"lastName\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/auth/signup"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"email\":null,\"password\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/auth/login"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "refreshToken",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"refreshToken\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/auth/refresh"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "logout",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/auth/logout?userId={{userId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "activateProfile",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "url":  "http://localhost:8081/api/auth/activate/{{token}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "forgetPassword",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/auth/send-otp?email={{email}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "sendOTP",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/auth/verify-otp?email={{email}}\u0026otp={{otp}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "changePassword",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"oldPassword\":null,\"newPassword\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/auth/forget-password?email={{email}}\u0026OTP={{otp}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "changeEmail",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"oldPassword\":null,\"newPassword\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/auth/change-password"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getLoggedInUser",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/auth/change-email?userId={{userId}}\u0026email=new.user@example.com"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "verifyOTP",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "http://localhost:8081/api/auth/me"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Users",
+                     "item":  [
+                                  {
+                                      "name":  "getMe",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "http://localhost:8081/api/users/me?userId={{userId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "update",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"firstName\":null,\"lastName\":null,\"email\":null,\"phone\":null,\"profileImage\":null,\"dateOfBirth\":null,\"gender\":null,\"status\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/users/update/me?userId={{userId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateProfilePic",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "file",
+                                                                                        "type":  "file",
+                                                                                        "src":  ""
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  "http://localhost:8081/api/users/uploadImage/{{userId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "createAddress",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"addressType\":null,\"addressLine1\":null,\"addressLine2\":null,\"landmark\":null,\"city\":null,\"state\":null,\"country\":null,\"postalCode\":null,\"latitude\":null,\"longitude\":null,\"isDefault\":null,\"userId\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/users/me/addresses"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateAddress",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"addressType\":null,\"addressLine1\":null,\"city\":null,\"state\":null,\"country\":null,\"postalCode\":null,\"isDefault\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/users/addresses/{{addressId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "deleteAddress",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/users/addresses/{{addressId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "setDefaultAddress",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "url":  "http://localhost:8081/api/users/addresses/{{addressId}}/default"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Menu",
+                     "item":  [
+                                  {
+                                      "name":  "createMenuCategory",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"categoryName\":null,\"categoryDescription\":null,\"restaurantId\":null,\"isActive\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/menuCategory"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateMenuCategory",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"categoryName\":null,\"categoryDescription\":null,\"restaurantId\":null,\"isActive\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/menuCategory/{{categoryId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "createMenuItem",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"restaurantId\":null,\"categoryId\":null,\"itemName\":null,\"itemDescription\":null,\"itemImage\":null,\"itemPrice\":null,\"discountedPrice\":null,\"isVeg\":null,\"isAvailable\":null,\"preparationTime\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/menuItem"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateMenuItem",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"restaurantId\":null,\"categoryId\":null,\"itemName\":null,\"itemDescription\":null,\"itemPrice\":null,\"discountedPrice\":null,\"isVeg\":null,\"isAvailable\":null,\"preparationTime\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/menuItem/{{itemId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "deleteMenuItem",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/menuItem/{{itemId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "deleteMenuCategory",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/menuCategory/{{categoryId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getMenuItemById",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query GetMenuItem($itemId: UUID!) { getMenuItemById(itemId: $itemId) { itemId restaurantId itemName itemDescription itemImage itemPrice discountedPrice isVeg isAvailable preparationTime itemImgUrl category { categoryId categoryName } } }\",\n  \"variables\": { \"itemId\": \"{{itemId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getMenuItems",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query GetMenuItems($restaurantId: UUID!) { getMenuItems(restaurantId: $restaurantId) { itemId itemName itemPrice isVeg isAvailable category { categoryId categoryName } } }\",\n  \"variables\": { \"restaurantId\": \"{{restaurantId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getMenuCategories",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query GetMenuCategories($restaurantId: UUID!) { getMenuCategories(restaurantId: $restaurantId) { categoryId categoryName categoryDescription restaurantId isActive menuItemList { itemId itemName itemPrice } } }\",\n  \"variables\": { \"restaurantId\": \"{{restaurantId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getMenuCategory",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query GetMenuCategory($categoryId: UUID!) { getMenuCategory(categoryId: $categoryId) { categoryId categoryName categoryDescription restaurantId isActive } }\",\n  \"variables\": { \"categoryId\": \"{{categoryId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Restaurants",
+                     "item":  [
+                                  {
+                                      "name":  "createRestaurant",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"name\":null,\"description\":null,\"phoneNumber\":null,\"email\":null,\"addressLine1\":null,\"city\":null,\"state\":null,\"country\":null,\"postalCode\":null,\"latitude\":null,\"longitude\":null,\"priceForTwo\":null,\"deliveryMinTime\":null,\"deliveryMaxTime\":null,\"isPureVeg\":null,\"isActive\":null,\"cuisineIds\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/restaurants"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateRestaurant",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"name\":null,\"description\":null,\"phoneNumber\":null,\"email\":null,\"city\":null,\"state\":null,\"country\":null,\"isActive\":null,\"cuisineIds\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/restaurants/{{restaurantId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "activateRestaurant",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "url":  "http://localhost:8081/api/restaurants/{{restaurantId}}/activate"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "deactivateRestaurant",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "url":  "http://localhost:8081/api/restaurants/{{restaurantId}}/deactivate"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "createRestaurantHours",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"dayOfWeek\":null,\"openingTime\":null,\"closingTime\":null,\"isClosed\":null,\"restaurant\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/restaurantHours"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateRestaurantHours",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"dayOfWeek\":null,\"openingTime\":null,\"closingTime\":null,\"isClosed\":null,\"restaurant\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/restaurantHours/{{restaurantId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "createCuisine",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"name\":null,\"slug\":null,\"isActive\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/cuisines"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "uploadRestaurantLogo",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "file",
+                                                                                        "type":  "file",
+                                                                                        "src":  ""
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  "http://localhost:8081/api/restaurants/{{restaurantId}}/logo"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "uploadRestaurantBanner",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "file",
+                                                                                        "type":  "file",
+                                                                                        "src":  ""
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  "http://localhost:8081/api/restaurants/{{restaurantId}}/banner"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "uploadCuisineImage",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "file",
+                                                                                        "type":  "file",
+                                                                                        "src":  ""
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  "http://localhost:8081/api/cuisines/{{cuisineId}}/image"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "restaurants",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query { restaurants { restaurantId name description phoneNumber email addressLine1 city state country postalCode latitude longitude rating ratingCount priceForTwo deliveryMinTime deliveryMaxTime isPureVeg isActive restaurantHours { restaurantHoursId dayOfWeek openingTime closingTime isClosed } } }\"\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "restaurant",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query GetRestaurant($id: UUID!) { restaurant(id: $id) { restaurantId name description rating isActive cuisines { cuisineId name slug } } }\",\n  \"variables\": { \"id\": \"{{restaurantId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "cuisines",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query { cuisines { cuisineId name slug imageUrl isActive } }\"\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "cuisine",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query GetCuisine($id: UUID!) { cuisine(id: $id) { cuisineId name slug imageUrl isActive } }\",\n  \"variables\": { \"id\": \"{{cuisineId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Cart",
+                     "item":  [
+                                  {
+                                      "name":  "initializeCart",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"userId\":null,\"restaurantId\":null,\"status\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/cart"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "linkCartToRestaurant",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/cart?userId={{userId}}\u0026restaurantId={{restaurantId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "clearCart",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/clear-cart?userId={{userId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "addCartItem",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"menuItemId\":null,\"quantity\":null,\"cartId\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/cartItem"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "removeCartItem",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/cartItem?cartItemId={{cartItemId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateCartItem",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/cartItem?cartItemId={{cartItemId}}\u0026cartItemQuantity=2"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "cartByUserId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query CartByUser($userId: UUID!) { cartByUserId(userId: $userId) { cartId userId restaurantId status cartItems { cartItemId menuItemId itemName unitPrice quantity totalPrice } } }\",\n  \"variables\": { \"userId\": \"{{userId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "cartItemsByCartId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query CartItems($cartId: UUID!) { cartItemsByCartId(cartId: $cartId) { cartItemId menuItemId itemName unitPrice quantity totalPrice } }\",\n  \"variables\": { \"cartId\": \"{{cartId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Favourites",
+                     "item":  [
+                                  {
+                                      "name":  "addFavourite",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"userId\":null,\"restaurantId\":null,\"createdAt\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/favourite"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "removeFavourite",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/favourite?id={{restaurantId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "favouritesByUserId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query Favourites($userId: ID!) { favouritesByUserId(userId: $userId) { id userId restaurantId createdAt } }\",\n  \"variables\": { \"userId\": \"{{userId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "favourite",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query Favourite($id: UUID!) { favourite(id: $id) { id userId restaurantId createdAt } }\",\n  \"variables\": { \"id\": \"{{restaurantId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Orders",
+                     "item":  [
+                                  {
+                                      "name":  "placeOrder",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"userId\":null,\"restaurantId\":null,\"deliveryAddressId\":null,\"status\":null,\"paymentStatus\":null,\"subtotal\":null,\"deliveryFee\":null,\"discount\":null,\"menuItemIds\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/order"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "cancelOrder",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/order/{{orderId}}/Customer%20requested%20cancellation"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateOrderStatus",
+                                      "request":  {
+                                                      "method":  "PATCH",
+                                                      "url":  "http://localhost:8081/api/order/{{orderId}}/CONFIRMED"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getAllOrders",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query Orders($userId: ID!) { getAllOrders(userId: $userId) { orderId orderNumber userId restaurantId deliveryAddressId status paymentStatus subtotal deliveryFee discount total orderItems { orderItemId menuItemId itemName unitPrice quantity totalPrice } } }\",\n  \"variables\": { \"userId\": \"{{userId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getOrderByOrderId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query Order($orderId: ID!) { getOrderByOrderId(orderId: $orderId) { orderId orderNumber status paymentStatus total cancelReason } }\",\n  \"variables\": { \"orderId\": \"{{orderId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getStatusHistoryByOrderId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query StatusHistory($orderId: ID!) { getStatusHistoryByOrderId(orderId: $orderId) { id orderId status createdAt } }\",\n  \"variables\": { \"orderId\": \"{{orderId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Payments",
+                     "item":  [
+                                  {
+                                      "name":  "makePayment",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"orderId\":null,\"amount\":null,\"userId\":null,\"currency\":null,\"method\":null,\"provider\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/payment"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updatePaymentStatus",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/payment/{{paymentId}}?status=SUCCESS"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "refundPayment",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/payment/{{paymentId}}/refund"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "findPaymentByPaymentId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query Payment($paymentId: UUID!) { findPaymentByPaymentId(paymentId: $paymentId) { paymentId orderId amount userId currency method status provider transactionId } }\",\n  \"variables\": { \"paymentId\": \"{{paymentId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "findPaymentByTransactionId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query PaymentByTransaction($transactionId: UUID!) { findPaymentByTransactionId(transactionId: $transactionId) { paymentId orderId amount currency method status transactionId } }\",\n  \"variables\": { \"transactionId\": \"{{transactionId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getAllPaymentsByUserId",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"query\": \"query Payments($userId: UUID!) { getAllPaymentsByUserId(userId: $userId) { paymentId orderId amount currency method status provider transactionId } }\",\n  \"variables\": { \"userId\": \"{{userId}}\" }\n}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/graphql"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Ratings",
+                     "item":  [
+                                  {
+                                      "name":  "createReview",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\"usernameId\":null,\"username\":null,\"restaurantId\":null,\"rating\":null,\"reviewText\":null}"
+                                                               },
+                                                      "url":  "http://localhost:8081/api/rating"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "updateReview",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "http://localhost:8081/api/rating/{{ratingId}}?review=Updated%20review\u0026ratingNum=4.5"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "deleteReview",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  "http://localhost:8081/api/rating?ratingId={{ratingId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getReviewsByUsernameId",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "http://localhost:8081/api/rating/{{userId}}/users"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "getReviewsByRestaurantId",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "http://localhost:8081/api/rating/{{restaurantId}}"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "countByRestaurantId",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "http://localhost:8081/api/rating/{{restaurantId}}/count"
+                                                  }
+                                  }
+                              ]
+                 }
+             ]
+}

@@ -23,6 +23,7 @@ import com.biterush.common.event.UserCreatedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,6 +41,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class AuthServiceImpl implements AuthService {
 
@@ -61,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public UserCredentialsResponseDTO registerUser(UserCredentialsRequestDTO request) {
+        log.info("Registering user with userId={} and email={}", request.getUserId(), request.getEmail());
         UserCredentials userCredentials = UserCredentialsDTOMapper.toEntity(request);
         userCredentials.setActivationTokenExpiry(LocalDateTime.now().plusMinutes(15));
         userCredentials.setPassword(encoder.encode(request.getPassword()));
@@ -115,12 +118,14 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         eventPublishingStatusRepo.save(userCreationNotificationEvent);
 
+        log.info("User registration completed for userId={}", savedUserCred.getUserId());
         return UserCredentialsDTOMapper.toDTO(savedUserCred);
     }
 
     @Override
     @Transactional
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        log.info("Login attempt for email={}", loginRequestDTO.email());
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.email(),loginRequestDTO.password()));
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         if(customUserDetails == null){
@@ -134,6 +139,7 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshToken)
                 .build();
         refreshTokenRepo.save(refreshTokenEntity);
+        log.info("Login completed for userId={}", userCredentials.getUserId());
         return new LoginResponseDTO(UserCredentialsDTOMapper.toDTO(userCredentials),accessToken,refreshToken);
     }
 
@@ -142,37 +148,44 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDTO refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.refreshToken();
         String username = jwtUtil.extractUsername(refreshToken);
+        log.info("Refreshing access token for email={}", username);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if (!jwtUtil.isValid(refreshToken, userDetails)) {
             throw new RuntimeException("Invalid Refresh Token! Login Again");
         }
         UserCredentials user = ((CustomUserDetails) userDetails).getUserCredentials();
+        log.info("Access token refreshed for userId={}", user.getUserId());
         return new LoginResponseDTO(UserCredentialsDTOMapper.toDTO(user), jwtUtil.generateAccessToken(user),null);
     }
 
     @Override
     @Transactional
     public Boolean logout(UUID userId) {
+        log.info("Logout requested for userId={}", userId);
         RefreshToken refreshTokenEntity = refreshTokenRepo.findByUserId(userId).orElseThrow(() -> new RuntimeException("Refresh Token not found"));
         refreshTokenRepo.delete(refreshTokenEntity);
+        log.info("Logout completed for userId={}", userId);
         return Boolean.TRUE;
     }
 
     @Override
     @Transactional
     public Boolean activateProfile(String activationToken) {
+        log.info("Profile activation requested");
         UserCredentials user = userCredentialsRepo.findByActivationToken(activationToken).orElseThrow(() -> new RuntimeException("User Not Found"));
         if (user.getActivationTokenExpiry().isBefore(LocalDateTime.now()))
             throw new RuntimeException("Activation Link expired");
         user.setStatus(STATUS.ACTIVE);
         user.setActivationToken("");
         userCredentialsRepo.save(user);
+        log.info("Profile activated for userId={}", user.getUserId());
         return true;
     }
 
     @Override
     @Transactional
     public Boolean forgetPassword(String email, String OTP, PasswordChangeRequest passwordChangeRequest) {
+        log.info("Password reset completion requested for email={}", email);
         UserCredentials userCredentials = userCredentialsRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("Email not found"));
         if(!userCredentials.getOTPVerified()){
             throw new RuntimeException("OTP not Verified");
@@ -182,12 +195,14 @@ public class AuthServiceImpl implements AuthService {
         userCredentials.setOTPExpiry(null);
         userCredentials.setOTPVerified(false);
         userCredentialsRepo.save(userCredentials);
+        log.info("Password reset completed for userId={}", userCredentials.getUserId());
         return Boolean.TRUE;
     }
 
     @Override
     @Transactional
     public Boolean sendOTP(String email) {
+        log.info("Password reset OTP requested for email={}", email);
         UserCredentials userCredentials = userCredentialsRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         String OTP = String.valueOf(100000 + new SecureRandom().nextInt(900000));
         userCredentials.setOTP(OTP);
@@ -216,6 +231,7 @@ public class AuthServiceImpl implements AuthService {
                 .nextRetryAt(LocalDateTime.now())
                 .build();
         eventPublishingStatusRepo.save(userCreationNotificationEvent);
+        log.info("Password reset OTP event queued for userId={}", userCredentials.getUserId());
         return null;
     }
 
@@ -230,6 +246,7 @@ public class AuthServiceImpl implements AuthService {
             }
             user.setPassword(encoder.encode(passwordChangeRequest.newPassword()));
             userCredentialsRepo.save(user);
+            log.info("Password changed for userId={}", user.getUserId());
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -238,24 +255,28 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public Boolean changeEmail(UUID userId, String newEmail) {
+        log.info("Email change requested for userId={}", userId);
         UserCredentials userCredentials = userCredentialsRepo.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
         if(userCredentialsRepo.existsByEmailAndUserIdNot(userCredentials.getEmail(), userId)){
             throw new RuntimeException("Email Already Exists");
         }
         userCredentials.setEmail(newEmail);
         userCredentialsRepo.save(userCredentials);
+        log.info("Email changed for userId={}", userId);
         return Boolean.TRUE;
     }
 
     @Override
     public UserCredentialsResponseDTO getLoggedInUser() {
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.debug("Loading profile for userId={}", user.getUserCredentials().getUserId());
         return UserCredentialsDTOMapper.toDTO(user.getUserCredentials());
     }
 
     @Override
     @Transactional
     public Boolean verifyOTP(String email, String OTP) {
+        log.info("OTP verification requested for email={}", email);
         UserCredentials user = userCredentialsRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -272,6 +293,7 @@ public class AuthServiceImpl implements AuthService {
         user.setOTPVerified(true);
 
         userCredentialsRepo.save(user);
+        log.info("OTP verified for userId={}", user.getUserId());
         return Boolean.TRUE;
     }
 

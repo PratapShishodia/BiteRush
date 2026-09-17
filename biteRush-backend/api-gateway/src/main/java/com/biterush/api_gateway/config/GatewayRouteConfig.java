@@ -33,6 +33,26 @@ public class GatewayRouteConfig {
                         .path("/api/restaurant/**")
                         .uri("lb://RESTAURANT-SERVICE"))
 
+                .route("cart-service", r -> r
+                        .path("/api/cart/**", "/api/cartItem/**", "/api/clear-cart/**")
+                        .uri("lb://CART-SERVICE"))
+
+                .route("favourite-service", r -> r
+                        .path("/api/favourite/**")
+                        .uri("lb://FAVOURITE-SERVICE"))
+
+                .route("order-service", r -> r
+                        .path("/api/order/**")
+                        .uri("lb://ORDER-SERVICE"))
+
+                .route("payment-service", r -> r
+                        .path("/api/payment/**")
+                        .uri("lb://PAYMENT-SERVICE"))
+
+                .route("notification-service", r -> r
+                        .path("/api/notification/**")
+                        .uri("lb://NOTIFICATION-SERVICE"))
+
                 .build();
     }
 }

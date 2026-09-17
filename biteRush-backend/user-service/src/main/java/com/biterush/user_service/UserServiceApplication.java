@@ -2,10 +2,12 @@ package com.biterush.user_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableKafka
+@EnableAspectJAutoProxy
 @SpringBootApplication
 public class UserServiceApplication {
 

@@ -33,6 +33,26 @@ server:
   servlet:
     context-path: /api
 
+logging:
+  structured:
+    format:
+      console: logstash
+      file: logstash
+    json:
+      rename:
+        "@timestamp": timestamp
+        logger_name: logger
+      exclude: "@version,thread_name,level_value"
+      add:
+        service: ${spring.application.name}
+  level:
+    root: INFO
+    com:
+      ps:
+        backend: DEBUG
+  file:
+    name: ../../logs/${spring.application.name}.log
+
 eureka:
   instance:
     prefer-ip-address: true
